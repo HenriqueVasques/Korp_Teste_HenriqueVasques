@@ -1,4 +1,5 @@
 using Billing.API.Data.Context;
+using Billing.API.Mappings;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,7 +11,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddControllers();
 
 builder.Services.AddOpenApi();
-
+builder.Services.AddAutoMapper(typeof(InvoiceProfile));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
