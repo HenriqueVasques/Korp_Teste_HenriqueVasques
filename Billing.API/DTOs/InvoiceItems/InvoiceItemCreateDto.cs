@@ -1,13 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Billing.API.Models;
+namespace Billing.API.DTOs.InvoiceItems;
 
-public class InvoiceItem
+public class InvoiceItemCreateDto
 {
-    public int Id { get; set; }
-    public int InvoiceId { get; set; }
-    public Invoice? Invoice { get; set; }
-
     [Required(ErrorMessage = "O código do produto é obrigatório.")]
     public required string ProductCode { get; set; }
 
@@ -20,8 +16,4 @@ public class InvoiceItem
 
     [Range(0.01, double.MaxValue, ErrorMessage = "O preço unitário deve ser maior que zero.")]
     public required decimal UnitPrice { get; set; }
-
-    public bool IsDeleted { get; set; } = false;
-
-    public decimal Total => Quantity * UnitPrice;
 }
