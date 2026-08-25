@@ -1,0 +1,12 @@
+/* Efeito de passar o mouse nas abas do menu */
+nav a:hover {
+  background-color: #e2e8f0;
+  color: #1e293b;
+}
+
+/* Estilo da aba ativa (página selecionada no momento) */
+nav a.active-tab {
+  background-color: #2563eb !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
+}

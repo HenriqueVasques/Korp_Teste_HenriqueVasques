@@ -1,0 +1,123 @@
+@import "primeicons/primeicons.css";
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: #f8fafc;
+  color: #1e293b;
+}
+
+/* Ocultar toast de licença do PrimeUI */
+.p-toast, [class*="PrimeUI"], div[style*="Invalid PrimeUI License"] {
+  display: none !important;
+}
+
+/* Estilização da Tabela PrimeNG */
+.p-datatable {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  margin-top: 1rem;
+}
+
+.p-datatable table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.p-datatable th {
+  background-color: #f1f5f9;
+  color: #334155;
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid #e2e8f0;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.p-datatable td {
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid #f1f5f9;
+  color: #334155;
+  font-size: 0.95rem;
+}
+
+.p-datatable tr:hover td {
+  background-color: #f8fafc;
+}
+
+/* Paginador */
+.p-paginator {
+  background: #ffffff;
+  padding: 0.75rem;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+/* Form Controls & Inputs */
+input[type="text"], input[type="number"] {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  box-sizing: border-box;
+  outline: none;
+}
+
+input[type="text"]:focus, input[type="number"]:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+button {
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  border: none;
+  background-color: #2563eb;
+  color: white;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+button:hover {
+  background-color: #1d4ed8;
+}
+
+/* Corrigir o fundo escuro do modal e centralização */
+.p-dialog-mask {
+  background-color: rgba(0, 0, 0, 0.4);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1100;
+}
+
+.p-dialog {
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.p-dialog .p-dialog-header {
+  padding: 1.25rem 1.5rem 0.5rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 600;
+}
+
+.p-dialog .p-dialog-content {
+  padding: 0 1.5rem 1.5rem 1.5rem;
+}
