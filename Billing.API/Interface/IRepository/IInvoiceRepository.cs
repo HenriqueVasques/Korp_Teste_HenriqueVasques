@@ -9,5 +9,6 @@ namespace Billing.API.Interface.IRepository
         Task<Invoice?> GetById(int invoiceId);
         Task<int> GetMaxNumberAsync();
         Task<IEnumerable<Invoice>> GetAll();
+        Task<bool> SaveChangesAsync();
     }
 }

@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Billing.API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260820065145_InitialCreate")]
+    [Migration("20260824221212_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -24,33 +24,6 @@ namespace Billing.API.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("Billing.API.Models.Invoice", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("IssueDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Number")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
-
-                    b.Property<decimal>("TotalAmount")
-                        .HasColumnType("numeric");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Invoices");
-                });
 
             modelBuilder.Entity("Billing.API.Models.InvoiceItem", b =>
                 {
@@ -67,6 +40,9 @@ namespace Billing.API.Migrations
 
                     b.Property<int>("InvoiceId")
                         .HasColumnType("integer");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("ProductCode")
                         .IsRequired()
@@ -85,9 +61,40 @@ namespace Billing.API.Migrations
                     b.ToTable("InvoiceItems");
                 });
 
+            modelBuilder.Entity("Invoice", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime>("IssueDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Number")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("TotalAmount")
+                        .HasColumnType("numeric");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Number")
+                        .IsUnique();
+
+                    b.ToTable("Invoices");
+                });
+
             modelBuilder.Entity("Billing.API.Models.InvoiceItem", b =>
                 {
-                    b.HasOne("Billing.API.Models.Invoice", "Invoice")
+                    b.HasOne("Invoice", "Invoice")
                         .WithMany("Items")
                         .HasForeignKey("InvoiceId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -96,7 +103,7 @@ namespace Billing.API.Migrations
                     b.Navigation("Invoice");
                 });
 
-            modelBuilder.Entity("Billing.API.Models.Invoice", b =>
+            modelBuilder.Entity("Invoice", b =>
                 {
                     b.Navigation("Items");
                 });

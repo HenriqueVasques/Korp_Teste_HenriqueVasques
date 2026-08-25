@@ -1,15 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Billing.API.Models;
+using System.ComponentModel.DataAnnotations;
 using static Billing.API.Enum.InvoiceStatusEnum;
-
-namespace Billing.API.Models;
 
 public class Invoice
 {
     public int Id { get; set; }
 
     [Required(ErrorMessage = "O número da nota fiscal é obrigatório.")]
-    [StringLength(50, ErrorMessage = "O número da nota deve ter no máximo 50 caracteres.")]
-    public required int Number { get; set; }
+    public required int Number { get; set; } 
 
     public DateTime IssueDate { get; set; } = DateTime.UtcNow;
 
@@ -20,5 +18,3 @@ public class Invoice
     public InvoiceStatus Status { get; set; } = InvoiceStatus.Open;
     public List<InvoiceItem> Items { get; set; } = new();
 }
-
-

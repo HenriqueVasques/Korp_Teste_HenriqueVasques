@@ -19,7 +19,7 @@ public class InvoiceItem
     public required int Quantity { get; set; }
 
     [Range(0.01, double.MaxValue, ErrorMessage = "O preço unitário deve ser maior que zero.")]
-    public required decimal UnitPrice { get; set; }
+    public decimal UnitPrice { get; set; } = 0;
 
     public bool IsDeleted { get; set; } = false;
 

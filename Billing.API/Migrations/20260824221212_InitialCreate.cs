@@ -18,9 +18,10 @@ namespace Billing.API.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Number = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    Number = table.Column<int>(type: "integer", nullable: false),
                     IssueDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     TotalAmount = table.Column<decimal>(type: "numeric", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
                     Status = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -38,7 +39,8 @@ namespace Billing.API.Migrations
                     ProductCode = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
                     Quantity = table.Column<int>(type: "integer", nullable: false),
-                    UnitPrice = table.Column<decimal>(type: "numeric", nullable: false)
+                    UnitPrice = table.Column<decimal>(type: "numeric", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -55,6 +57,12 @@ namespace Billing.API.Migrations
                 name: "IX_InvoiceItems_InvoiceId",
                 table: "InvoiceItems",
                 column: "InvoiceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Invoices_Number",
+                table: "Invoices",
+                column: "Number",
+                unique: true);
         }
 
         /// <inheritdoc />

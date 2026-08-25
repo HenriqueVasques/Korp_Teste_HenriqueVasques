@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Billing.API.Data.Repository;
 using Billing.API.DTOs.InvoiceItems;
 using Billing.API.Interface.IRepository;
 using Billing.API.Interface.IService;
@@ -34,6 +35,14 @@ namespace Billing.API.Service
             if (invoice.Status != InvoiceStatus.Open)
                 throw new InvalidOperationException("Não é possível adicionar itens a uma nota fiscal que não esteja aberta.");
 
+            var isProductCodeInUseByAnotherItem = await _iInvoiceItemRepository.ExistsProductCodeInInvoice(dto.ProductCode, invoiceId);
+            if (isProductCodeInUseByAnotherItem)
+                throw new InvalidOperationException("Já existe outro item com este código de produto nesta nota fiscal, se quer inserir mais, atualize o produto e aumente a quantidade");
+
+            if (await _iInvoiceItemRepository.ExistsDescriptionInInvoice(dto.Description, invoiceId))
+                throw new InvalidOperationException("Já existe um item com esta descrição nesta nota fiscal.");
+
+
             var invoiceItem = _mapper.Map<InvoiceItem>(dto);
             invoiceItem.InvoiceId = invoiceId;
 
@@ -62,9 +71,11 @@ namespace Billing.API.Service
             if (invoiceItem.InvoiceId != invoiceId)
                 throw new InvalidOperationException("O item da nota fiscal não pertence à nota fiscal especificada.");
 
-            var isProductCodeInUseByAnotherItem = await _iInvoiceItemRepository.ExistsProductCodeInInvoice(dto.ProductCode, invoiceId, invoiceItemId);
-            if (isProductCodeInUseByAnotherItem)
+            if (await _iInvoiceItemRepository.ExistsProductCodeInInvoice(dto.ProductCode, invoiceId, invoiceItemId))
                 throw new InvalidOperationException("Já existe outro item com este código de produto nesta nota fiscal.");
+
+            if (await _iInvoiceItemRepository.ExistsDescriptionInInvoice(dto.Description, invoiceId, invoiceItemId))
+                throw new InvalidOperationException("Já existe outro item com esta descrição nesta nota fiscal.");
 
             var oldItemTotal = invoiceItem.Total;
 
@@ -73,6 +84,7 @@ namespace Billing.API.Service
             invoice.TotalAmount += (invoiceItem.Total - oldItemTotal);
 
             await _iInvoiceItemRepository.Update(invoiceItem);
+            await _iInvoiceItemRepository.SaveChangesAsync();
 
             return _mapper.Map<InvoiceItemResponseDto>(invoiceItem);
         }
@@ -93,6 +105,7 @@ namespace Billing.API.Service
             invoice.TotalAmount -= invoiceItem.Total;
             invoiceItem.IsDeleted = true;
             await _iInvoiceItemRepository.Update(invoiceItem);
+            await _iInvoiceItemRepository.SaveChangesAsync();
         }
     }
 }

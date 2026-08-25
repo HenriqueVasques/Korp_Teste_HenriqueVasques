@@ -23,7 +23,7 @@ namespace Billing.API.Data.Repository
         public async Task Update(InvoiceItem invoiceItem)
         {
              _appDbContext.InvoiceItems.Update(invoiceItem);
-            await SaveChangesAsync();
+            await Task.CompletedTask;
         }
 
         public async Task<InvoiceItem?> GetById(int id)
@@ -32,7 +32,16 @@ namespace Billing.API.Data.Repository
                 .Where(i => i.Id == id && !i.IsDeleted)
                 .FirstOrDefaultAsync();
         }
-        public async Task<bool> ExistsProductCodeInInvoice(string productCode, int invoiceId, int currentItemId)
+        public async Task<bool> ExistsDescriptionInInvoice(string description, int invoiceId, int currentItemId = 0)
+        {
+            return await _appDbContext.InvoiceItems
+                .AnyAsync(i => i.Description.ToLower() == description.ToLower()
+                            && i.InvoiceId == invoiceId
+                            && i.Id != currentItemId
+                            && !i.IsDeleted
+                );
+        }
+        public async Task<bool> ExistsProductCodeInInvoice(string productCode, int invoiceId, int currentItemId = 0)
         {
             return await _appDbContext.InvoiceItems
                 .AnyAsync(i => i.ProductCode == productCode

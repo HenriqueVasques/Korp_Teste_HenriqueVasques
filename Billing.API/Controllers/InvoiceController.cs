@@ -1,4 +1,5 @@
-﻿using Billing.API.Interface.IService;
+﻿using Billing.API.DTOs.Invoices;
+using Billing.API.Interface.IService;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Billing.API.Controllers
@@ -15,11 +16,11 @@ namespace Billing.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateInvoice()
+        public async Task<IActionResult> CreateInvoice([FromBody] InvoiceCreateDto dto)
         {
             try
             {
-                var invoice = await _invoiceService.CreateInvoice();
+                var invoice = await _invoiceService.CreateInvoice(dto);
                 return StatusCode(StatusCodes.Status201Created, new { message = "Nota Fiscal criada com sucesso!", dados = invoice });
             }
             catch (InvalidOperationException ex)
@@ -55,6 +56,28 @@ namespace Billing.API.Controllers
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new { error = "Ocorreu um erro interno no servidor.", detail = ex.Message });
+            }
+        }
+
+        [HttpPut("{id:int}/close")]
+        public async Task<IActionResult> CloseInvoice(int id)
+        {
+            try
+            {
+                await _invoiceService.CloseInvoice(id); // ou o nome do seu método no Service
+                return Ok(new { message = "Nota Fiscal fechada e estoque abatido com sucesso!" });
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { error = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { error = "Erro ao fechar a nota fiscal.", detail = ex.Message });
             }
         }
 

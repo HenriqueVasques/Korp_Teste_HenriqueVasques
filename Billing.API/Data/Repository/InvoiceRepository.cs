@@ -22,7 +22,7 @@ namespace Billing.API.Data.Repository
         public async Task Update(Invoice invoice)
         {
             _appDbContext.Invoices.Update(invoice);
-            await _appDbContext.SaveChangesAsync();
+            await Task.CompletedTask;
         }
 
         public async Task<int> GetMaxNumberAsync()
@@ -45,6 +45,11 @@ namespace Billing.API.Data.Repository
                 .Include(i => i.Items.Where(item => !item.IsDeleted))
                 .Where(i => !i.IsDeleted)
                 .ToListAsync();
+        }
+
+        public async Task<bool> SaveChangesAsync()
+        {
+            return await _appDbContext.SaveChangesAsync() > 0;
         }
     }
 }
