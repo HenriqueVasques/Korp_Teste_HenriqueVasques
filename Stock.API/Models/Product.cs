@@ -17,4 +17,5 @@ public class Product
     [Required(ErrorMessage = "O saldo do produto é obrigatório.")]
     [Range(0, int.MaxValue, ErrorMessage = "O saldo do produto não pode ser negativo.")]
     public required int Balance { get; set; }
+    public bool IsDeleted { get; set; } = false;
 }
